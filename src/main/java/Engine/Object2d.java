@@ -16,10 +16,29 @@ public class Object2d extends ShaderProgram{
     int vao;
     int vbo;
 
-    public Object2d(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices) {
+    Vector4f color;
+
+    UniformsMap uniformsMap;
+
+    List<Vector3f> verticesColor;
+    int vboColor;
+
+    public Object2d(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices,Vector4f color) {
         super(shaderModuleDataList);
         this.vertices = vertices;
         setupVAOVBO();
+        this.color = color;
+        this.uniformsMap = new UniformsMap(getProgramId());
+        uniformsMap.createUniform("uni_color");
+
+    }
+
+    //with color
+    public Object2d(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices,List<Vector3f> verticesColor) {
+        super(shaderModuleDataList);
+        this.vertices = vertices;
+        this.verticesColor = verticesColor;
+        setupVAOVBOwithcolor();
     }
 
     public void setupVAOVBO() {
@@ -33,12 +52,42 @@ public class Object2d extends ShaderProgram{
         glBufferData(GL_ARRAY_BUFFER, Utils.listoFloat(vertices), GL_STATIC_DRAW);
         //List to float untuk ngubah dari list ke float
     }
+
+    public void setupVAOVBOwithcolor() {
+        //untuk setup VAO
+        vao = glGenVertexArrays();
+        glBindVertexArray(vao);
+
+        //untuk setup VBO
+        vbo = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, Utils.listoFloat(vertices), GL_STATIC_DRAW);
+        //List to float untuk ngubah dari list ke float
+
+        vboColor = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, vboColor);
+        glBufferData(GL_ARRAY_BUFFER, Utils.listoFloat(verticesColor), GL_STATIC_DRAW);
+    }
+
     public void drawSetup() {
+        bind();
+        uniformsMap.setUniform("uni_color",color);
+
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+    }
+
+    public void drawSetupwithverticescolor() {
         bind();
 
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+
+        glEnableVertexAttribArray(1);
+        glBindBuffer(GL_ARRAY_BUFFER, vboColor);
+        glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
     }
     public void draw() {
         drawSetup();
@@ -56,6 +105,26 @@ public class Object2d extends ShaderProgram{
          */
 
         glDrawArrays(GL_LINE_LOOP, 0, vertices.size());
+//        glDrawArrays(GL_LINE, 0, 2);
+
+    }
+
+    public void drawwithverticescolor() {
+        drawSetupwithverticescolor();
+        //Menggambar vertices
+        glLineWidth(10); //ketebalan garis
+        glPointSize(0); //besar/kecilnya vertex
+
+        /*
+        GL_LINE
+        GL_LINE_STRIP
+        GL_LINE_LOOP
+        GL_TRIANGLES
+        GL_TRIANGLE_FAN
+        GL_POINT
+         */
+
+        glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 //        glDrawArrays(GL_LINE, 0, 2);
 
     }
