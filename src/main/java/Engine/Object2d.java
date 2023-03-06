@@ -1,5 +1,6 @@
 package Engine;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -128,6 +129,47 @@ public class Object2d extends ShaderProgram{
 //        glDrawArrays(GL_LINE, 0, 2);
 
     }
+
+    public void drawline() {
+        drawSetup();
+        //Menggambar vertices
+        glLineWidth(10); //ketebalan garis
+        glPointSize(0); //besar/kecilnya vertex
+
+        /*
+        GL_LINE
+        GL_LINE_STRIP
+        GL_LINE_LOOP
+        GL_TRIANGLES
+        GL_TRIANGLE_FAN
+        GL_POINT
+         */
+
+        glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+//        glDrawArrays(GL_LINE, 0, 2);
+
+    }
+
+    public void addVertices(Vector3f newVector){
+        vertices.add(newVector);
+        setupVAOVBO();
+
+    }
+
+    public void changeVerticePos(int index, Vector3f newPos){
+        vertices.set(index, newPos);
+        setupVAOVBO();
+    }
+
+    // check if the clicked point is within the rectangle
+    public boolean withinRectangle(Vector2f point){return false;}
+
+    // used to prevent making an overlapping rectangle
+    public boolean withinRadius(Vector2f point){return false;}
+
+    public void move(Vector3f center){}
+
+
 
 
 
