@@ -10,7 +10,7 @@ import static org.lwjgl.opengl.GL15C.glBindBuffer;
 import static org.lwjgl.opengl.GL15C.glBufferData;
 
 
-public class Rectangle extends Object2d{
+public class Rectangle extends Object3d {
 
     List<Integer> index;
 

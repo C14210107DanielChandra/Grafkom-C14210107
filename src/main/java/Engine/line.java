@@ -5,7 +5,6 @@ import org.joml.Vector4f;
 
 import java.util.List;
 
-import static org.lwjgl.opengl.GL11.GL_TRIANGLE_FAN;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL15.*;
@@ -13,7 +12,7 @@ import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15C.glBindBuffer;
 import static org.lwjgl.opengl.GL15C.glBufferData;
 
-public class line extends Object2d {
+public class line extends Object3d {
     List<Integer> index;
     int ibo;
 

@@ -5,12 +5,7 @@ import org.joml.Vector4f;
 
 import java.util.*;
 
-import static org.lwjgl.opengl.GL11.glDrawArrays;
-import static org.lwjgl.opengl.GL11.glLineWidth;
-import static org.lwjgl.opengl.GL11.glPointSize;
-import static org.lwjgl.opengl.GL11C.*;
-
-public class Curve extends Object2d {
+public class Curve extends Object3d {
     List<Vector3f> points = new ArrayList<>();
     List<Integer> numbers;
     List<Vector3f> curve;

@@ -11,7 +11,7 @@ import static org.lwjgl.opengl.GL11.glLineWidth;
 import static org.lwjgl.opengl.GL11.glPointSize;
 import static org.lwjgl.opengl.GL11C.*;
 
-public class MovableRectangle extends Object2d {
+public class MovableRectangle extends Object3d {
 
     float radius;
     float x;
