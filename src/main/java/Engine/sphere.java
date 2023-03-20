@@ -2,15 +2,14 @@ package Engine;
 
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL11C;
-import org.lwjgl.opengles.GLES20;
+
+
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.lwjgl.opengl.GL11.GL_POLYGON;
-import static org.lwjgl.opengl.GL11C.*;
+import static org.lwjgl.opengl.GL11.*;
+
 
 
 public class sphere extends circle{
@@ -27,17 +26,18 @@ public class sphere extends circle{
         this.sectorCount = sectorCount;
         //createBox();
         //createSphere();
-        //createellipsoid();
+        createellipsoid();
         // createhyperboloid1sheet();
         //createhyperboloid2sheet();
         //createellipticcone();
-        createelipticparaboloid();
+       // createelipticparaboloid();
         //createhyperboloidparaboloid();
         setupVAOVBO();
     }
 
     public void createBox(){
 
+        vertices.clear();
         Vector3f temp = new Vector3f();
         ArrayList<Vector3f> tempVertices = new ArrayList<>();
 
@@ -46,13 +46,17 @@ public class sphere extends circle{
         temp.y = center.get(1) + radiusY/2;
         temp.z = center.get(2) - radiusZ/2;
         tempVertices.add(temp);
+        System.out.println("1"+temp);
         temp =new Vector3f();
+
+
 
         //bot left back
         temp.x = center.get(0) - radiusX/2;
         temp.y = center.get(1) - radiusY/2;
         temp.z = center.get(2) - radiusZ/2;
         tempVertices.add(temp);
+        System.out.println(temp);
         temp =new Vector3f();
 
         //top left front
@@ -60,6 +64,7 @@ public class sphere extends circle{
         temp.y = center.get(1) + radiusY/2;
         temp.z = center.get(2) + radiusZ/2;
         tempVertices.add(temp);
+        System.out.println(temp);
         temp =new Vector3f();
 
         //bot left front
@@ -67,6 +72,7 @@ public class sphere extends circle{
         temp.y = center.get(1) - radiusY/2;
         temp.z = center.get(2) + radiusZ/2;
         tempVertices.add(temp);
+        System.out.println(temp);
         temp =new Vector3f();
 
         //top right back
@@ -74,6 +80,7 @@ public class sphere extends circle{
         temp.y = center.get(1) + radiusY/2;
         temp.z = center.get(2) - radiusZ/2;
         tempVertices.add(temp);
+        System.out.println(temp);
         temp =new Vector3f();
 
         //bot right back
@@ -81,6 +88,7 @@ public class sphere extends circle{
         temp.y = center.get(1) - radiusY/2;
         temp.z = center.get(2) - radiusZ/2;
         tempVertices.add(temp);
+        System.out.println(temp);
         temp =new Vector3f();
 
         //top right front
@@ -88,6 +96,7 @@ public class sphere extends circle{
         temp.y = center.get(1) + radiusY/2;
         temp.z = center.get(2) + radiusZ/2;
         tempVertices.add(temp);
+        System.out.println(temp);
         temp =new Vector3f();
 
         //bot right front
@@ -95,11 +104,12 @@ public class sphere extends circle{
         temp.y = center.get(1) - radiusY/2;
         temp.z = center.get(2) + radiusZ/2;
         tempVertices.add(temp);
+        System.out.println(temp);
         temp =new Vector3f();
 
         //_____________________________________________________________________________________________________________________________
 
-        vertices.clear();
+        //vertices.clear();
         //kotak belakang
         vertices.add(tempVertices.get(0));
         vertices.add(tempVertices.get(1));
@@ -161,7 +171,7 @@ public class sphere extends circle{
 
         for(double v = -Math.PI/2; v<= Math.PI/2; v+=Math.PI/60){
             for(double u = -Math.PI; u<= Math.PI; u+=Math.PI/60){
-                float x = 0.7f * (float)(Math.cos(v) * Math.cos(u));
+                float x = 0.5f * (float)(Math.cos(v) * Math.cos(u));
                 float y = 0.5f * (float)(Math.cos(v) * Math.sin(u));
                 float z = 0.5f * (float)(Math.sin(v));
                 temp.add(new Vector3f(x,y,z));
@@ -262,9 +272,16 @@ public class sphere extends circle{
 
     public void draw(){
         drawSetup();
-        glLineWidth(10); //ketebalan garis
-        glPointSize(10); //besar kecil vertex
-        glDrawArrays(GL_LINE_LOOP,
+        //System.out.println(vertices.size());
+//        System.out.println("index 0" + vertices.get(0));
+//        System.out.println("index 5" + vertices.get(1));
+//        System.out.println("index 12" + vertices.get(2));
+//        System.out.println("index 13" + vertices.get(3));
+//        System.out.println("index 27" + vertices.get(4));
+
+        glLineWidth(1); //ketebalan garis
+        glPointSize(1); //besar kecil vertex
+        glDrawArrays(GL_LINE_STRIP,
                 0,
                 vertices.size());
     }

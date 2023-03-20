@@ -1,9 +1,11 @@
 package Engine;
 
+import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL15.*;
@@ -14,6 +16,9 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 public class Object3d extends ShaderProgram{
     List<Vector3f> vertices; //untuk generate titik
+
+
+
     int vao;
     int vbo;
 
@@ -24,6 +29,8 @@ public class Object3d extends ShaderProgram{
     List<Vector3f> verticesColor;
     int vboColor;
 
+    Matrix4f model;
+
     public Object3d(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color) {
         super(shaderModuleDataList);
         this.vertices = vertices;
@@ -31,6 +38,9 @@ public class Object3d extends ShaderProgram{
         this.color = color;
         this.uniformsMap = new UniformsMap(getProgramId());
         uniformsMap.createUniform("uni_color");
+        uniformsMap.createUniform("model");
+        model = new Matrix4f();
+
 
     }
 
@@ -73,6 +83,7 @@ public class Object3d extends ShaderProgram{
     public void drawSetup() {
         bind();
         uniformsMap.setUniform("uni_color",color);
+        uniformsMap.setUniform("model",model);
 
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -168,6 +179,22 @@ public class Object3d extends ShaderProgram{
     public boolean withinRadius(Vector2f point){return false;}
 
     public void move(Vector3f center){}
+
+    public void translateObject(float offsetX,float offsetY,float offsetZ ){
+        model = new Matrix4f().translate(offsetX,offsetY,offsetZ).mul(new Matrix4f(model));
+    }
+
+    public void rotateObject(float degree,float offsetX,float offsetY,float offsetZ){
+        model = new Matrix4f().rotate(degree,offsetX,offsetY,offsetZ).mul(new Matrix4f(model));
+
+    }
+
+    public void scaleObject(float offsetX,float offsetY,float offsetZ ){
+        model = new Matrix4f().scale(offsetX,offsetY,offsetZ).mul(new Matrix4f(model));
+    }
+
+
+
 
 
 
