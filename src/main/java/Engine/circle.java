@@ -77,10 +77,10 @@ public class circle extends Object3d {
 
     }
 
-    public void draw() {
-        drawSetup();
-        glLineWidth(10);
-        glPointSize(10);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.size());
-    }
+//    public void draw() {
+//        drawSetup();
+//        glLineWidth(10);
+//        glPointSize(10);
+//        glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.size());
+//    }
 }

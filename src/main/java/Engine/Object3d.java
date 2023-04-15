@@ -31,14 +31,44 @@ public class Object3d extends ShaderProgram{
 
     Matrix4f model;
 
+    List<Object3d> childObject;
+
+    public List<Object3d> getChildObject() {
+        return childObject;
+    }
+
+    public void setChildObject(List<Object3d> childObject) {
+        this.childObject = childObject;
+    }
+
+
+
+
+    public Object3d(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color,List<Object3d>childObject) {
+        super(shaderModuleDataList);
+        this.vertices = vertices;
+        setupVAOVBO();
+        this.color = color;
+        this.childObject = childObject;
+        this.uniformsMap = new UniformsMap(getProgramId());
+        uniformsMap.createUniform("uni_color");
+        uniformsMap.createUniform("model");
+        model = new Matrix4f();
+
+
+    }
+
     public Object3d(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color) {
         super(shaderModuleDataList);
         this.vertices = vertices;
         setupVAOVBO();
         this.color = color;
+        this.childObject = new ArrayList<Object3d>();
         this.uniformsMap = new UniformsMap(getProgramId());
         uniformsMap.createUniform("uni_color");
         uniformsMap.createUniform("model");
+        uniformsMap.createUniform("view");
+        uniformsMap.createUniform("projection");
         model = new Matrix4f();
 
 
@@ -80,10 +110,12 @@ public class Object3d extends ShaderProgram{
         glBufferData(GL_ARRAY_BUFFER, Utils.listoFloat(verticesColor), GL_STATIC_DRAW);
     }
 
-    public void drawSetup() {
+    public void drawSetup(Camera camera, Projection projection) {
         bind();
         uniformsMap.setUniform("uni_color",color);
         uniformsMap.setUniform("model",model);
+        uniformsMap.setUniform("view",camera.getViewMatrix());
+        uniformsMap.setUniform("projection",projection.getProjMatrix());
 
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -101,8 +133,8 @@ public class Object3d extends ShaderProgram{
         glBindBuffer(GL_ARRAY_BUFFER, vboColor);
         glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
     }
-    public void draw() {
-        drawSetup();
+    public void draw(Camera camera, Projection projection) {
+        drawSetup(camera,projection);
         //Menggambar vertices
         glLineWidth(10); //ketebalan garis
         glPointSize(0); //besar/kecilnya vertex
@@ -117,6 +149,9 @@ public class Object3d extends ShaderProgram{
          */
 
         glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.size());
+        for (Object3d child:childObject){
+            child.draw(camera,projection);
+        }
 //        glDrawArrays(GL_LINE, 0, 2);
 
     }
@@ -141,25 +176,25 @@ public class Object3d extends ShaderProgram{
 
     }
 
-    public void drawline() {
-        drawSetup();
-        //Menggambar vertices
-        glLineWidth(10); //ketebalan garis
-        glPointSize(0); //besar/kecilnya vertex
-
-        /*
-        GL_LINE
-        GL_LINE_STRIP
-        GL_LINE_LOOP
-        GL_TRIANGLES
-        GL_TRIANGLE_FAN
-        GL_POINT
-         */
-
-        glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
-//        glDrawArrays(GL_LINE, 0, 2);
-
-    }
+//    public void drawline() {
+//        drawSetup();
+//        //Menggambar vertices
+//        glLineWidth(10); //ketebalan garis
+//        glPointSize(0); //besar/kecilnya vertex
+//
+//        /*
+//        GL_LINE
+//        GL_LINE_STRIP
+//        GL_LINE_LOOP
+//        GL_TRIANGLES
+//        GL_TRIANGLE_FAN
+//        GL_POINT
+//         */
+//
+//        glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+////        glDrawArrays(GL_LINE, 0, 2);
+//
+//    }
 
     public void addVertices(Vector3f newVector){
         vertices.add(newVector);
@@ -182,15 +217,33 @@ public class Object3d extends ShaderProgram{
 
     public void translateObject(float offsetX,float offsetY,float offsetZ ){
         model = new Matrix4f().translate(offsetX,offsetY,offsetZ).mul(new Matrix4f(model));
+
+        for(Object3d child:childObject){
+            child.translateObject(offsetX,offsetY,offsetZ);
+        }
     }
 
     public void rotateObject(float degree,float offsetX,float offsetY,float offsetZ){
         model = new Matrix4f().rotate(degree,offsetX,offsetY,offsetZ).mul(new Matrix4f(model));
 
+        for(Object3d child:childObject){
+            child.rotateObject(degree,offsetX,offsetY,offsetZ);
+        }
+
     }
 
     public void scaleObject(float offsetX,float offsetY,float offsetZ ){
         model = new Matrix4f().scale(offsetX,offsetY,offsetZ).mul(new Matrix4f(model));
+
+        for(Object3d child:childObject){
+            child.scaleObject(offsetX,offsetY,offsetZ);
+        }
+    }
+
+    public Vector3f updateCenterPoint(){
+        Vector3f centerTemp = new Vector3f();
+        model.transformPosition(0.0f,0.0f,0.0f,centerTemp);
+        return centerTemp;
     }
 
 

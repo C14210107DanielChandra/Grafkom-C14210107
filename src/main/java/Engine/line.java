@@ -31,7 +31,7 @@ public class line extends Object3d {
     }
 
     public void draw(){
-            drawSetup();
+          //  drawSetup();
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ibo);
             glDrawElements(GL_LINE_LOOP,index.size(),GL_UNSIGNED_INT,0);
         }

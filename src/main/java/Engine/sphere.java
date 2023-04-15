@@ -26,11 +26,11 @@ public class sphere extends circle{
         this.sectorCount = sectorCount;
         //createBox();
         //createSphere();
-        createellipsoid();
+        //createellipsoid();
         // createhyperboloid1sheet();
         //createhyperboloid2sheet();
-        //createellipticcone();
-       // createelipticparaboloid();
+        createellipticcone();
+       //createelipticparaboloid();
         //createhyperboloidparaboloid();
         setupVAOVBO();
     }
@@ -270,21 +270,21 @@ public class sphere extends circle{
 
     }
 
-    public void draw(){
-        drawSetup();
-        //System.out.println(vertices.size());
-//        System.out.println("index 0" + vertices.get(0));
-//        System.out.println("index 5" + vertices.get(1));
-//        System.out.println("index 12" + vertices.get(2));
-//        System.out.println("index 13" + vertices.get(3));
-//        System.out.println("index 27" + vertices.get(4));
-
-        glLineWidth(1); //ketebalan garis
-        glPointSize(1); //besar kecil vertex
-        glDrawArrays(GL_LINE_STRIP,
-                0,
-                vertices.size());
-    }
+//    public void draw(){
+//        drawSetup();
+//        //System.out.println(vertices.size());
+////        System.out.println("index 0" + vertices.get(0));
+////        System.out.println("index 5" + vertices.get(1));
+////        System.out.println("index 12" + vertices.get(2));
+////        System.out.println("index 13" + vertices.get(3));
+////        System.out.println("index 27" + vertices.get(4));
+//
+//        glLineWidth(1); //ketebalan garis
+//        glPointSize(1); //besar kecil vertex
+//        glDrawArrays(GL_LINE_STRIP,
+//                0,
+//                vertices.size());
+//    }
     public void createSphere(){
         float pi = (float)Math.PI;
 

@@ -2,6 +2,7 @@ import Engine.*;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.joml.sampling.UniformSampling;
 import org.lwjgl.opengl.GL;
 
 import java.util.ArrayList;
@@ -46,12 +47,15 @@ public class Main {
     boolean inMovingState = false;
     int currentRectangle = 0;
 
-
+    Camera camera = new Camera();
+    Projection projection = new Projection(window.getWidth(),window.getHeight());
 
 
     public void init() {
         window.init();
         GL.createCapabilities();
+        camera.setPosition(0,0,0.5f);
+        camera.setRotation((float)Math.toRadians(0.0f), (float) Math.toRadians(0.0f));
 
 
         //code
@@ -555,20 +559,16 @@ public class Main {
                 0.1f,
                 0.1f,
                 new Vector3f(0.0f,0.0f,0.0f),
-                0.2f,
+                0.1f,
                 36,
                 18
 
 
         ));
 
-        objectsphere.get(0).scaleObject(0.4f,0.4f,0.4f);
+        objectsphere.get(0).scaleObject(0.005f,0.005f,0.005f);
         objectsphere.get(0).translateObject(0.0f,0.0f,0.0f);
-        offsets.add(new Vector3f(0.0f,0.0f,0.0f));
-
-
-        //merkurius
-        objectsphere.add(new sphere(
+        objectsphere.get(0).getChildObject().add(new sphere(
                 Arrays.asList(
                         //shaderFile lokasi menyesuaikan objectnya
                         new ShaderProgram.ShaderModuleData
@@ -580,51 +580,19 @@ public class Main {
                 ),
                 new ArrayList<>(),
                 new Vector4f(0.0f,1.0f,0.0f,1.0f),
-                0.0f,
-                0.2f,
+                0.1f,
+                0.1f,
                 new Vector3f(0.0f,0.0f,0.0f),
-                0.2f,
+                0.1f,
                 36,
                 18
 
 
         ));
-//        objectsphere.get(0).rotateObject((float) Math.toRadians(0.5f),0.0f,0.0f,1.0f);
-        objectsphere.get(1).scaleObject(0.06f,0.06f,0.06f);
-        objectsphere.get(1).translateObject(0.3f,0.0f,0.0f);
-        offsets.add(new Vector3f(0.3f,0.0f,0.0f));
 
+        objectsphere.get(0).getChildObject().get(0).translateObject(0.25f,0.0f,0.0f);
 
-         //venus
-        objectsphere.add(new sphere(
-            Arrays.asList(
-            //shaderFile lokasi menyesuaikan objectnya
-            new ShaderProgram.ShaderModuleData
-            ("resource/shader/scene.vert"
-            , GL_VERTEX_SHADER),
-                        new ShaderProgram.ShaderModuleData
-                                ("resource/shader/scene.frag"
-                                , GL_FRAGMENT_SHADER)
-            ),
-            new ArrayList<>(),
-            new Vector4f(0.0f,1.0f,0.0f,1.0f),
-                0.0f,
-                        0.2f,
-                        new Vector3f(0.0f,0.0f,0.0f),
-                0.2f,
-                        36,
-                        18
-
-
-                        ));
-//        objectsphere.get(0).rotateObject((float) Math.toRadians(0.5f),0.0f,0.0f,1.0f);
-        objectsphere.get(2).scaleObject(0.1f,0.1f,0.1f);
-        objectsphere.get(2).translateObject(0.46f,0.0f,0.0f);
-        offsets.add(new Vector3f(0.46f,0.0f,0.0f));
-
-
-        //Bumi
-        objectsphere.add(new sphere(
+        objectsphere.get(0).getChildObject().add(new sphere(
                 Arrays.asList(
                         //shaderFile lokasi menyesuaikan objectnya
                         new ShaderProgram.ShaderModuleData
@@ -636,23 +604,17 @@ public class Main {
                 ),
                 new ArrayList<>(),
                 new Vector4f(0.0f,1.0f,0.0f,1.0f),
-                0.0f,
-                0.2f,
+                0.1f,
+                0.1f,
                 new Vector3f(0.0f,0.0f,0.0f),
-                0.2f,
+                0.1f,
                 36,
                 18
-
-
         ));
-//        objectsphere.get(0).rotateObject((float) Math.toRadians(0.5f),0.0f,0.0f,1.0f);
-        objectsphere.get(3).scaleObject(0.15f,0.15f,0.15f);
-        objectsphere.get(3).translateObject(0.65f,0.0f,0.0f);
-        offsets.add(new Vector3f(0.65f,0.0f,0.0f));
 
+        objectsphere.get(0).getChildObject().get(1).translateObject(0.5f,0.0f,0.0f);
 
-        //Mars
-        objectsphere.add(new sphere(
+        objectsphere.get(0).getChildObject().get(1).getChildObject().add(new sphere(
                 Arrays.asList(
                         //shaderFile lokasi menyesuaikan objectnya
                         new ShaderProgram.ShaderModuleData
@@ -664,49 +626,163 @@ public class Main {
                 ),
                 new ArrayList<>(),
                 new Vector4f(0.0f,1.0f,0.0f,1.0f),
-                0.0f,
-                0.2f,
+                0.1f,
+                0.1f,
                 new Vector3f(0.0f,0.0f,0.0f),
-                0.2f,
+                0.1f,
                 36,
                 18
-
-
         ));
-//        objectsphere.get(0).rotateObject((float) Math.toRadians(0.5f),0.0f,0.0f,1.0f);
-        objectsphere.get(4).scaleObject(0.1f,0.1f,0.1f);
-        objectsphere.get(4).translateObject(0.85f,0.0f,0.0f);
-        offsets.add(new Vector3f(0.85f,0.0f,0.0f));
 
+        objectsphere.get(0).getChildObject().get(0).scaleObject(0.05f,0.05f,0.05f);
+        objectsphere.get(0).getChildObject().get(1).scaleObject(0.05f,0.05f,0.05f);
+        objectsphere.get(0).getChildObject().get(1).getChildObject().get(0).scaleObject(0.025f,0.025f,0.025f);
+        objectsphere.get(0).getChildObject().get(1).getChildObject().get(0).translateObject(0.025f,-0.01f,0.0f);
+
+
+
+
+
+//        //merkurius
+//        objectsphere.add(new sphere(
+//                Arrays.asList(
+//                        //shaderFile lokasi menyesuaikan objectnya
+//                        new ShaderProgram.ShaderModuleData
+//                                ("resource/shader/scene.vert"
+//                                        , GL_VERTEX_SHADER),
+//                        new ShaderProgram.ShaderModuleData
+//                                ("resource/shader/scene.frag"
+//                                        , GL_FRAGMENT_SHADER)
+//                ),
+//                new ArrayList<>(),
+//                new Vector4f(0.0f,1.0f,0.0f,1.0f),
+//                0.0f,
+//                0.2f,
+//                new Vector3f(0.0f,0.0f,0.0f),
+//                0.2f,
+//                36,
+//                18
 //
-        //bulan
-        objectsphere.add(new sphere(
-                Arrays.asList(
-                        //shaderFile lokasi menyesuaikan objectnya
-                        new ShaderProgram.ShaderModuleData
-                                ("resource/shader/scene.vert"
-                                        , GL_VERTEX_SHADER),
-                        new ShaderProgram.ShaderModuleData
-                                ("resource/shader/scene.frag"
-                                        , GL_FRAGMENT_SHADER)
-                ),
-                new ArrayList<>(),
-                new Vector4f(0.0f,1.0f,0.0f,1.0f),
-                0.0f,
-                0.2f,
-                new Vector3f(0.0f,0.0f,0.0f),
-                0.2f,
-                36,
-                18
-
-
-        ));
-//        objectsphere.get(0).rotateObject((float) Math.toRadians(0.5f),0.0f,0.0f,1.0f);
-        objectsphere.get(5).scaleObject(0.025f,0.025f,0.025f);
-        objectsphere.get(5).translateObject(0.69f,0.12f,0.0f);
-        offsets.add(new Vector3f(0.69f,0.12f,0.0f));
-
-
+//
+//        ));
+////        objectsphere.get(0).rotateObject((float) Math.toRadians(0.5f),0.0f,0.0f,1.0f);
+//        objectsphere.get(1).scaleObject(0.06f,0.06f,0.06f);
+//        objectsphere.get(1).translateObject(0.3f,0.0f,0.0f);
+//        offsets.add(new Vector3f(0.3f,0.0f,0.0f));
+//
+//
+//         //venus
+//        objectsphere.add(new sphere(
+//            Arrays.asList(
+//            //shaderFile lokasi menyesuaikan objectnya
+//            new ShaderProgram.ShaderModuleData
+//            ("resource/shader/scene.vert"
+//            , GL_VERTEX_SHADER),
+//                        new ShaderProgram.ShaderModuleData
+//                                ("resource/shader/scene.frag"
+//                                , GL_FRAGMENT_SHADER)
+//            ),
+//            new ArrayList<>(),
+//            new Vector4f(0.0f,1.0f,0.0f,1.0f),
+//                0.0f,
+//                        0.2f,
+//                        new Vector3f(0.0f,0.0f,0.0f),
+//                0.2f,
+//                        36,
+//                        18
+//
+//
+//                        ));
+////        objectsphere.get(0).rotateObject((float) Math.toRadians(0.5f),0.0f,0.0f,1.0f);
+//        objectsphere.get(2).scaleObject(0.1f,0.1f,0.1f);
+//        objectsphere.get(2).translateObject(0.46f,0.0f,0.0f);
+//        offsets.add(new Vector3f(0.46f,0.0f,0.0f));
+//
+//
+//        //Bumi
+//        objectsphere.add(new sphere(
+//                Arrays.asList(
+//                        //shaderFile lokasi menyesuaikan objectnya
+//                        new ShaderProgram.ShaderModuleData
+//                                ("resource/shader/scene.vert"
+//                                        , GL_VERTEX_SHADER),
+//                        new ShaderProgram.ShaderModuleData
+//                                ("resource/shader/scene.frag"
+//                                        , GL_FRAGMENT_SHADER)
+//                ),
+//                new ArrayList<>(),
+//                new Vector4f(0.0f,1.0f,0.0f,1.0f),
+//                0.0f,
+//                0.2f,
+//                new Vector3f(0.0f,0.0f,0.0f),
+//                0.2f,
+//                36,
+//                18
+//
+//
+//        ));
+////        objectsphere.get(0).rotateObject((float) Math.toRadians(0.5f),0.0f,0.0f,1.0f);
+//        objectsphere.get(3).scaleObject(0.15f,0.15f,0.15f);
+//        objectsphere.get(3).translateObject(0.65f,0.0f,0.0f);
+//        offsets.add(new Vector3f(0.65f,0.0f,0.0f));
+//
+//
+//        //Mars
+//        objectsphere.add(new sphere(
+//                Arrays.asList(
+//                        //shaderFile lokasi menyesuaikan objectnya
+//                        new ShaderProgram.ShaderModuleData
+//                                ("resource/shader/scene.vert"
+//                                        , GL_VERTEX_SHADER),
+//                        new ShaderProgram.ShaderModuleData
+//                                ("resource/shader/scene.frag"
+//                                        , GL_FRAGMENT_SHADER)
+//                ),
+//                new ArrayList<>(),
+//                new Vector4f(0.0f,1.0f,0.0f,1.0f),
+//                0.0f,
+//                0.2f,
+//                new Vector3f(0.0f,0.0f,0.0f),
+//                0.2f,
+//                36,
+//                18
+//
+//
+//        ));
+////        objectsphere.get(0).rotateObject((float) Math.toRadians(0.5f),0.0f,0.0f,1.0f);
+//        objectsphere.get(4).scaleObject(0.1f,0.1f,0.1f);
+//        objectsphere.get(4).translateObject(0.85f,0.0f,0.0f);
+//        offsets.add(new Vector3f(0.85f,0.0f,0.0f));
+//
+////
+//        //bulan
+//        objectsphere.add(new sphere(
+//                Arrays.asList(
+//                        //shaderFile lokasi menyesuaikan objectnya
+//                        new ShaderProgram.ShaderModuleData
+//                                ("resource/shader/scene.vert"
+//                                        , GL_VERTEX_SHADER),
+//                        new ShaderProgram.ShaderModuleData
+//                                ("resource/shader/scene.frag"
+//                                        , GL_FRAGMENT_SHADER)
+//                ),
+//                new ArrayList<>(),
+//                new Vector4f(0.0f,1.0f,0.0f,1.0f),
+//                0.0f,
+//                0.2f,
+//                new Vector3f(0.0f,0.0f,0.0f),
+//                0.2f,
+//                36,
+//                18
+//
+//
+//        ));
+////        objectsphere.get(0).rotateObject((float) Math.toRadians(0.5f),0.0f,0.0f,1.0f);
+//        objectsphere.get(5).scaleObject(0.025f,0.025f,0.025f);
+//        objectsphere.get(5).translateObject(0.69f,0.12f,0.0f);
+//        offsets.add(new Vector3f(0.69f,0.12f,0.0f));
+//
+//
    }
 
 
@@ -721,10 +797,38 @@ public class Main {
         if(window.isKeyPressed(GLFW_KEY_W)){
             //System.out.println("w");
            // objectsphere.get(0).rotateObject((float) Math.toRadians(0.5f),0.0f,1.0f,0.0f);
+            objectsphere.get(0).rotateObject((float)Math.toRadians(0.5f),0.0f,0.0f,1.0f);
+
+            for (Object3d child: objectsphere.get(0).getChildObject()){
+                Vector3f tempCenterPoint = child.updateCenterPoint();
+
+                child.translateObject(tempCenterPoint.x*-1
+                        ,tempCenterPoint.y*-1
+                        ,tempCenterPoint.z*-1);
+
+                child.rotateObject((float)Math.toRadians(0.5f),0.0f,0.0f,1.0f);
+
+                child.translateObject(tempCenterPoint.x*+1
+                        ,tempCenterPoint.y*+1
+                        ,tempCenterPoint.z*+1);
+            }
+            for (Object3d child: objectsphere.get(0).getChildObject().get(1).getChildObject()){
+                Vector3f tempCenterPoint = objectsphere.get(0).getChildObject().get(1).updateCenterPoint();
+
+                child.translateObject(tempCenterPoint.x*-1
+                        ,tempCenterPoint.y*-1
+                        ,tempCenterPoint.z*-1);
+
+                child.rotateObject((float)Math.toRadians(0.7f),0.0f,0.0f,1.0f);
+
+                child.translateObject(tempCenterPoint.x*+1
+                        ,tempCenterPoint.y*+1
+                        ,tempCenterPoint.z*+1);
+            }
         }
 
         if(window.isKeyPressed(GLFW_KEY_F)){
-            //System.out.println("w");
+            //System.out.println("w"); msih salah
             objectsphere.get(0).rotateObject((float) Math.toRadians(0.5f),0.0f,0.0f,1.0f);
             objectsphere.get(1).rotateObject((float) Math.toRadians(0.5f),0.0f,0.0f,1.0f);
             objectsphere.get(2).rotateObject((float) Math.toRadians(0.5f),0.0f,0.0f,1.0f);
@@ -736,7 +840,7 @@ public class Main {
         }
 
         if(window.isKeyPressed(GLFW_KEY_G)){
-            //System.out.println("w");
+            //System.out.println("w"); masih salah
 
             objectsphere.get(0).translateObject(-offsets.get(0).x,-offsets.get(0).y,-offsets.get(0).z);
             objectsphere.get(0).rotateObject((float) Math.toRadians(0.5f),0.0f,1.0f,0.0f);
@@ -845,7 +949,7 @@ public class Main {
             //code no color
 
             for(Object3d object: objectsphere){
-                object.draw();
+                object.draw(camera,projection);
             }
 
 

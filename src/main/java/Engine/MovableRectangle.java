@@ -63,7 +63,7 @@ public class MovableRectangle extends Object3d {
     }
 
     public void draw(){
-        drawSetup();
+        //drawSetup();
         glLineWidth(10);
         glPointSize(10);
         glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.size());
