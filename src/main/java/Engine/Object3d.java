@@ -41,6 +41,11 @@ public class Object3d extends ShaderProgram{
         this.childObject = childObject;
     }
 
+    // these bools are used to exclude certain child from rotate, scale, translate for anim purposes
+    Boolean excludeRotate = false;
+    Boolean excludeScale = false;
+    Boolean excludeTranslate = false;
+
 
 
 
@@ -122,6 +127,16 @@ public class Object3d extends ShaderProgram{
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
     }
 
+    public void drawSetup() {
+        bind();
+        uniformsMap.setUniform("uni_color",color);
+        uniformsMap.setUniform("model",model);
+
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+    }
+
     public void drawSetupwithverticescolor() {
         bind();
 
@@ -136,8 +151,8 @@ public class Object3d extends ShaderProgram{
     public void draw(Camera camera, Projection projection) {
         drawSetup(camera,projection);
         //Menggambar vertices
-        glLineWidth(10); //ketebalan garis
-        glPointSize(0); //besar/kecilnya vertex
+        glLineWidth(1); //ketebalan garis
+        glPointSize(1); //besar/kecilnya vertex
 
         /*
         GL_LINE
@@ -148,7 +163,7 @@ public class Object3d extends ShaderProgram{
         GL_POINT
          */
 
-        glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.size());
+        glDrawArrays(GL_POLYGON, 0, vertices.size());
         for (Object3d child:childObject){
             child.draw(camera,projection);
         }
@@ -176,25 +191,23 @@ public class Object3d extends ShaderProgram{
 
     }
 
-//    public void drawline() {
-//        drawSetup();
-//        //Menggambar vertices
-//        glLineWidth(10); //ketebalan garis
-//        glPointSize(0); //besar/kecilnya vertex
-//
-//        /*
-//        GL_LINE
-//        GL_LINE_STRIP
-//        GL_LINE_LOOP
-//        GL_TRIANGLES
-//        GL_TRIANGLE_FAN
-//        GL_POINT
-//         */
-//
-//        glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
-////        glDrawArrays(GL_LINE, 0, 2);
-//
-//    }
+    public void drawLine(Camera camera, Projection projection) {
+        drawSetup(camera, projection);
+        // Draw the vertices
+        glLineWidth(4.5f);
+        glPointSize(10);
+        // GL_TRIANGLES
+        // GL_LINE_LOOP
+        // GL_LINE_STRIP
+        // GL_LINES
+        // GL_POINTS
+        // GL_TRIANGLE_FAN
+        // GL_POLYGON
+        glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+        for (Object3d child:childObject){
+            child.drawLine(camera, projection);
+        }
+    }
 
     public void addVertices(Vector3f newVector){
         vertices.add(newVector);
@@ -246,6 +259,29 @@ public class Object3d extends ShaderProgram{
         return centerTemp;
     }
 
+    public Boolean getExcludeRotate() {
+        return excludeRotate;
+    }
+
+    public void setExcludeRotate(Boolean excludeRotate) {
+        this.excludeRotate = excludeRotate;
+    }
+
+    public Boolean getExcludeScale() {
+        return excludeScale;
+    }
+
+    public void setExcludeScale(Boolean excludeScale) {
+        this.excludeScale = excludeScale;
+    }
+
+    public Boolean getExcludeTranslate() {
+        return excludeTranslate;
+    }
+
+    public void setExcludeTranslate(Boolean excludeTranslate) {
+        this.excludeTranslate = excludeTranslate;
+    }
 
 
 

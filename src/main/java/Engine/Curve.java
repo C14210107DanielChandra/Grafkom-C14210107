@@ -40,6 +40,7 @@ public class Curve extends Object3d {
             }
         }
 
+        System.out.println("a");
         this.vertices = curve;
     }
 
@@ -64,6 +65,7 @@ public class Curve extends Object3d {
         points.add(newVector);
         CreateCurve();
         setupVAOVBO();
+        System.out.println("b");
     }
 
     public void changeVerticePos(int index, Vector3f newPos){

@@ -19,19 +19,28 @@ public class sphere extends circle{
 
 
     public sphere(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color, float radiusX,float radiusY, Vector3f center,float radiusZ
-    ,int sectorCount,int stackCount) {
+    ,int sectorCount,int stackCount,int shapes) {
         super(shaderModuleDataList, vertices, color, radiusX,radiusY, center);
-        this.radiusZ = radiusZ;
+        this.radiusZ = radiusZ ;
         this.stackCount = stackCount;
         this.sectorCount = sectorCount;
-        //createBox();
-        //createSphere();
-        //createellipsoid();
-        // createhyperboloid1sheet();
-        //createhyperboloid2sheet();
-        createellipticcone();
-       //createelipticparaboloid();
-        //createhyperboloidparaboloid();
+        if (shapes == 1){
+            createBox();
+        } else if (shapes == 2){
+            createellipsoid();
+        } else if (shapes == 3){
+            createhyperboloid1sheet();
+        } else if (shapes == 4){
+            createhyperboloid2sheet();
+        } else if (shapes == 5){
+            createellipticcone();
+        } else if (shapes == 6){
+            createelipticparaboloid();
+        } else if (shapes == 7){
+            createhyperboloidparaboloid();
+        } else if (shapes == 8){
+            createCylinder();
+        }
         setupVAOVBO();
     }
 
@@ -179,6 +188,22 @@ public class sphere extends circle{
         }
         vertices = temp;
 
+    }
+
+    public void createCylinder() {
+        ArrayList<Vector3f> temp = new ArrayList<>();
+        float radius = 0.09f;
+        float height = 0.7f;
+        int slices = 600;
+        for (int i = 0; i <= slices; i++) {
+            double angle = 2.0 * Math.PI / slices * i;
+            float x = radius * (float) Math.cos(angle);
+            float y = height / 2;
+            float z = radius * (float) Math.sin(angle);
+            temp.add(new Vector3f(x, y, z));
+            temp.add(new Vector3f(x, -y, z));
+        }
+        vertices = temp;
     }
 
     public void createhyperboloid1sheet(){
